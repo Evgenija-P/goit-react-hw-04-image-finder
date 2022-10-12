@@ -14,7 +14,7 @@ import { Loader } from 'components/Loader';
 export const App = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
-  const [showModal, setShowModal] = useState(false);
+
   const [modalUrl, setModalUrl] = useState('');
   const [alt, setAlt] = useState('');
   const [items, setiItems] = useState([]);
@@ -36,10 +36,6 @@ export const App = () => {
   function modalImage({ largeImageURL, tags }) {
     setModalUrl(largeImageURL);
     setAlt(tags);
-  }
-
-  function toggleModal() {
-    setShowModal(!showModal);
   }
 
   useEffect(() => {
@@ -91,17 +87,15 @@ export const App = () => {
       {items && (
         <ImageGallery
           items={items}
-          query={query}
-          page={page}
           modalImage={modalImage}
-          toggleModal={toggleModal}
+          // toggleModal={toggleModal}
         />
       )}
       {showButton && (!items || items.length !== 0) && (
         <Button page={page} onClickButton={onClick} />
       )}
       <ToastContainer transition={Flip} />
-      {showModal && <Modal src={modalUrl} alt={alt} onClose={toggleModal} />}
+      {/* {showModal && <Modal src={modalUrl} alt={alt} onClose={toggleModal} />} */}
     </AppWrapper>
   );
 };

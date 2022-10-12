@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
 import { List } from './ImageGallery.styled';
+// import { Modal } from '../Modal/Modal';
 
 export const ImageGallery = ({ items }) => {
+  // const [showModal, setShowModal] = useState(false);
+
+  // function toggleModal() {
+  //   setShowModal(!showModal);
+  // }
   // async componentDidUpdate(prevProps, prevState) {
   //   const { page, perPage } = this.state;
 
@@ -88,7 +94,6 @@ export const ImageGallery = ({ items }) => {
               webformatURL={webformatURL}
               tags={tags}
               largeImageURL={largeImageURL}
-              // onClickImage={this.onClickImage}
             />
           ))}
         </List>
