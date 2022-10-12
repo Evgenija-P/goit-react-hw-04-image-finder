@@ -5,8 +5,5 @@ export const fetchImage = async (page, perPage, nextQuery) => {
   const API_KEY = `key=29432031-54944c319385602ed128077f3`;
   const urlOptions = `image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`;
 
-  const response = await axios.get(
-    `${url}?${API_KEY}&q=${nextQuery}&${urlOptions}`
-  );
-  return response.data;
+  return axios.get(`${url}?${API_KEY}&q=${nextQuery}&${urlOptions}`);
 };
