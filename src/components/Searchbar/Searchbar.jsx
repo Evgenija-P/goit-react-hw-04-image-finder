@@ -11,9 +11,17 @@ import {
   Input,
 } from './Searchbar.styled';
 
-export const Searchbar = ({ onForm }) => {
+export const Searchbar = ({ page, onForm }) => {
   const [currentPage, setСurrentPage] = useState(1);
   const [text, setText] = useState('');
+  const propPage = page;
+
+  useEffect(() => {
+    setСurrentPage(propPage);
+  }, [propPage]);
+
+  console.log('propPage', propPage);
+  console.log('currentPage', currentPage);
 
   const handleChange = e => {
     setText(e.target.value.toLowerCase());
@@ -26,9 +34,11 @@ export const Searchbar = ({ onForm }) => {
       toast.error('Введите текст запроса!', { position: 'top-center' });
       return;
     }
-    setСurrentPage(currentPage + 1);
+
+    setСurrentPage(page + 1);
 
     onForm({ text, currentPage });
+    console.log(text, currentPage);
   };
 
   useEffect(() => {

@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { Searchbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { AppWrapper } from './App.styled';
-import { Modal } from 'components/Modal';
 import { Button } from 'components/Button';
 import { fetchImage } from '../api';
 import { Loader } from 'components/Loader';
@@ -14,88 +13,93 @@ import { Loader } from 'components/Loader';
 export const App = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
-
-  const [modalUrl, setModalUrl] = useState('');
-  const [alt, setAlt] = useState('');
   const [items, setiItems] = useState([]);
   const [perPage, setPerPage] = useState(12);
   const [isLoading, setIsLoading] = useState(false);
-  const [largeImageURL, setLargeImageURL] = useState('');
   const [showButton, setshowButton] = useState(false);
-
-  const options = {
-    position: 'top-center',
-    autoClose: 3000,
-  };
 
   function onForm({ text, currentPage }) {
     setQuery(text);
     setPage(currentPage);
-  }
-
-  function modalImage({ largeImageURL, tags }) {
-    setModalUrl(largeImageURL);
-    setAlt(tags);
+    console.log(text, currentPage);
   }
 
   useEffect(() => {
+    setiItems([]);
     setIsLoading(true);
+    setPage(1);
     fetchImage(page, perPage, query)
       .then(data => {
         const { hits, totalHits } = data.data;
         console.log(hits, totalHits);
-        if (hits) {
-          setiItems([...items, ...hits]);
-          setshowButton(true);
-        } else {
-          setiItems(hits);
-        }
+        setiItems(hits);
+
         if (totalHits > 0) {
-          toast.success(`Hooray! We found ${totalHits} images.`, options);
-          const lastPage = Math.ceil(totalHits / perPage);
-          if (page === lastPage) {
-            toast.warn('Sorry, this is the last page...', options);
-            setshowButton(false);
-          }
-        } else if (query !== query) {
-          toast.warn(
-            'Oops, we did not find anything for your request!',
-            options
-          );
+          toast.success(`Hooray! We found ${totalHits} images.`);
+          setshowButton(true);
+        }
+        if (totalHits > 0 && hits.length === totalHits) {
+          toast.warn('Sorry, this is the last page...');
+          setshowButton(false);
+        } else if (totalHits === 0) {
+          toast.warn('Oops, we did not find anything for your request!');
         }
       })
       .catch(error => {
         console.log(error);
-        toast.error(
-          'Oops, something went wrong. Repeat one more time!',
-          options
-        );
+        toast.error('Oops, something went wrong. Repeat one more time!');
       })
       .finally(() => {
         setIsLoading(false);
       });
     console.log(items);
-  }, [query, page]);
+  }, [query]);
+
+  useEffect(() => {
+    if (page > 1) {
+      setIsLoading(true);
+      fetchImage(page, perPage, query)
+        .then(data => {
+          const { hits, totalHits } = data.data;
+          console.log(hits, totalHits);
+          setiItems([...items, ...hits]);
+          setshowButton(true);
+
+          if (totalHits > 0) {
+            toast.success(`Hooray! We found ${totalHits} images.`);
+            setshowButton(true);
+          }
+          if (totalHits > 0 && hits.length === totalHits) {
+            toast.warn('Sorry, this is the last page...');
+            setshowButton(false);
+          } else if (totalHits === 0) {
+            toast.warn('Oops, we did not find anything for your request!');
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          toast.error('Oops, something went wrong. Repeat one more time!');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      console.log(items);
+    }
+  }, [page]);
 
   function onClick(page) {
     setPage(page);
   }
+
   return (
     <AppWrapper>
-      <Searchbar onForm={onForm} />
+      <Searchbar page={page} onForm={onForm} />
       {isLoading && <Loader />}
-      {items && (
-        <ImageGallery
-          items={items}
-          modalImage={modalImage}
-          // toggleModal={toggleModal}
-        />
-      )}
+      {items && <ImageGallery items={items} />}
       {showButton && (!items || items.length !== 0) && (
         <Button page={page} onClickButton={onClick} />
       )}
       <ToastContainer transition={Flip} />
-      {/* {showModal && <Modal src={modalUrl} alt={alt} onClose={toggleModal} />} */}
     </AppWrapper>
   );
 };
