@@ -20,9 +20,9 @@ export const Searchbar = ({ page, onForm }) => {
     setСurrentPage(page);
   }, [page]);
 
-  useEffect(() => {
-    onForm({ text, currentPage });
-  }, [currentPage, text]);
+  // useEffect(() => {
+  //   onForm({ text, currentPage });
+  // }, [currentPage, text]);
 
   console.log('propPage', page);
   console.log('currentPage', currentPage);
