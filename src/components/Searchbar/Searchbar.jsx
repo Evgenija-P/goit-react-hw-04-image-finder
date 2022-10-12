@@ -14,13 +14,17 @@ import {
 export const Searchbar = ({ page, onForm }) => {
   const [currentPage, setСurrentPage] = useState(1);
   const [text, setText] = useState('');
-  const propPage = page;
+  // const propPage = page;
 
   useEffect(() => {
-    setСurrentPage(propPage);
-  }, [propPage]);
+    setСurrentPage(page);
+  }, [page]);
 
-  console.log('propPage', propPage);
+  useEffect(() => {
+    onForm({ text, currentPage });
+  }, [currentPage, text]);
+
+  console.log('propPage', page);
   console.log('currentPage', currentPage);
 
   const handleChange = e => {
@@ -35,7 +39,7 @@ export const Searchbar = ({ page, onForm }) => {
       return;
     }
 
-    setСurrentPage(page + 1);
+    setСurrentPage(currentPage + 1);
 
     onForm({ text, currentPage });
     console.log(text, currentPage);

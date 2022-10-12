@@ -58,7 +58,7 @@ export const App = () => {
   useEffect(() => {
     if (page > 1) {
       setIsLoading(true);
-      fetchImage(items, page, perPage, query)
+      fetchImage(page, perPage, query)
         .then(data => {
           const { hits, totalHits } = data.data;
           console.log(hits, totalHits);
