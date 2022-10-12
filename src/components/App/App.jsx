@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -7,43 +7,57 @@ import { ImageGallery } from 'components/ImageGallery';
 import { AppWrapper } from './App.styled';
 import { Modal } from 'components/Modal';
 
-export class App extends Component {
-  state = {
-    page: 1,
-    query: '',
-    showModal: false,
-    modalUrl: '',
-    alt: '',
-  };
+export const App = () => {
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [modalUrl, setModalUrl] = useState('');
+  const [alt, setAlt] = useState('');
+  const [items, setiItems] = useState(null);
+  const [perPage, setPerPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [largeImageURL, setLargeImageURL] = useState('');
+  const [showButton, setshowButton] = useState(false);
 
-  onForm = ({ text, currentPage }) => {
-    this.setState({ query: text, page: currentPage });
-  };
+  // state = {
+  //   page: 1,
+  //   query: '',
+  //   showModal: false,
+  //   modalUrl: '',
+  //   alt: '',
 
-  modalImage = ({ largeImageURL, tags }) => {
-    this.setState({ modalUrl: largeImageURL, alt: tags });
-  };
+  //   items: null,
+  //   perPage: 12,
+  //   isLoading: false,
+  //   largeImageURL: '',
+  //   showButton: false,
+  // };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-  };
-
-  render() {
-    const { showModal, modalUrl, alt, query, page } = this.state;
-    return (
-      <AppWrapper>
-        <Searchbar onForm={this.onForm} />
-        <ImageGallery
-          query={query}
-          page={page}
-          modalImage={this.modalImage}
-          toggleModal={this.toggleModal}
-        />
-        <ToastContainer transition={Flip} />
-        {showModal && (
-          <Modal src={modalUrl} alt={alt} onClose={this.toggleModal} />
-        )}
-      </AppWrapper>
-    );
+  function onForm({ text, currentPage }) {
+    setQuery(text);
+    setPage(currentPage);
   }
-}
+
+  function modalImage({ largeImageURL, tags }) {
+    setModalUrl(largeImageURL);
+    setAlt(tags);
+  }
+
+  function toggleModal() {
+    setShowModal(!showModal);
+  }
+
+  return (
+    <AppWrapper>
+      <Searchbar onForm={onForm} />
+      <ImageGallery
+        query={query}
+        page={page}
+        modalImage={modalImage}
+        toggleModal={toggleModal}
+      />
+      <ToastContainer transition={Flip} />
+      {showModal && <Modal src={modalUrl} alt={alt} onClose={toggleModal} />}
+    </AppWrapper>
+  );
+};
