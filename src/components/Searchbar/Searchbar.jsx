@@ -12,17 +12,18 @@ import {
 } from './Searchbar.styled';
 
 export const Searchbar = ({ page, onForm }) => {
-  const [currentPage, setСurrentPage] = useState(1);
+  const [currentPage, setСurrentPage] = useState(0);
   const [text, setText] = useState('');
-  // const propPage = page;
 
   useEffect(() => {
-    setСurrentPage(page);
-  }, [page]);
+    setСurrentPage(0);
+  }, [text]);
 
-  // useEffect(() => {
-  //   onForm({ text, currentPage });
-  // }, [currentPage, text]);
+  useEffect(() => {
+    if (page >= currentPage) {
+      setСurrentPage(page);
+    }
+  }, [currentPage, page]);
 
   console.log('propPage', page);
   console.log('currentPage', currentPage);
@@ -35,25 +36,24 @@ export const Searchbar = ({ page, onForm }) => {
     e.preventDefault();
 
     if (text.trim() === '') {
-      toast.error('Введите текст запроса!', { position: 'top-center' });
+      toast.error('Введите текст запроса!');
       return;
     }
 
-    setСurrentPage(currentPage + 1);
+    // setСurrentPage(currentPage + 1);
 
     onForm({ text, currentPage });
     console.log(text, currentPage);
   };
 
-  useEffect(() => {
-    setСurrentPage(1);
-  }, [text]);
-
   const id = nanoid(3);
 
   return (
     <SearchHeader>
-      <SearchForm onSubmit={handleSubmit}>
+      <SearchForm
+        onSubmit={handleSubmit}
+        onClick={() => setСurrentPage(page + 1)}
+      >
         <SearchButton type="submit">
           <ButtoTitle>Search</ButtoTitle>
         </SearchButton>
