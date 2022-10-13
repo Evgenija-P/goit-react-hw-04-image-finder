@@ -11,19 +11,17 @@ import {
   Input,
 } from './Searchbar.styled';
 
-export const Searchbar = ({ page, onForm }) => {
+export const Searchbar = ({ page, onFormText, onFormPage }) => {
   const [currentPage, setСurrentPage] = useState(0);
   const [text, setText] = useState('');
 
   useEffect(() => {
-    setСurrentPage(0);
-  }, [text]);
-
-  useEffect(() => {
     if (page >= currentPage) {
       setСurrentPage(page);
+    } else {
+      onFormPage({ currentPage });
     }
-  }, [currentPage, page]);
+  }, [currentPage, onFormPage, page]);
 
   console.log('propPage', page);
   console.log('currentPage', currentPage);
@@ -40,9 +38,9 @@ export const Searchbar = ({ page, onForm }) => {
       return;
     }
 
-    // setСurrentPage(currentPage + 1);
+    setСurrentPage(currentPage + 1);
 
-    onForm({ text, currentPage });
+    onFormText({ text, currentPage });
     console.log(text, currentPage);
   };
 
@@ -50,10 +48,7 @@ export const Searchbar = ({ page, onForm }) => {
 
   return (
     <SearchHeader>
-      <SearchForm
-        onSubmit={handleSubmit}
-        onClick={() => setСurrentPage(page + 1)}
-      >
+      <SearchForm onSubmit={handleSubmit}>
         <SearchButton type="submit">
           <ButtoTitle>Search</ButtoTitle>
         </SearchButton>
@@ -75,5 +70,6 @@ export const Searchbar = ({ page, onForm }) => {
 
 Searchbar.propTypes = {
   onSearch: PropTypes.func,
-  onForm: PropTypes.func.isRequired,
+  onFormText: PropTypes.func.isRequired,
+  onFormPage: PropTypes.func.isRequired,
 };

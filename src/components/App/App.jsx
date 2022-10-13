@@ -14,28 +14,33 @@ export const App = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [items, setiItems] = useState([]);
-  const [perPage, setPerPage] = useState(12);
+  // const [perPage, setPerPage] = useState(12);
   const [isLoading, setIsLoading] = useState(false);
   const [showButton, setshowButton] = useState(false);
 
-  function onForm({ text, currentPage }) {
+  function onFormText({ text, currentPage }) {
     setQuery(text);
     setPage(currentPage);
     console.log(text, currentPage);
+  }
+
+  function onFormPage({ currentPage }) {
+    setPage(currentPage);
+    console.log(currentPage);
   }
 
   useEffect(() => {
     setiItems([]);
     setIsLoading(true);
     setPage(1);
-    fetchImage(page, perPage, query)
+    fetchImage(page, query)
       .then(data => {
         const { hits, totalHits } = data.data;
         console.log(hits, totalHits);
         setiItems(hits);
 
         if (totalHits > 0) {
-          toast.success(`Hooray! We found ${totalHits} images.`);
+          // toast.success(`Hooray! We found ${totalHits} images.`);
           setshowButton(true);
         }
         if (totalHits > 0 && hits.length === totalHits) {
@@ -58,7 +63,7 @@ export const App = () => {
   useEffect(() => {
     if (page > 1) {
       setIsLoading(true);
-      fetchImage(page, perPage, query)
+      fetchImage(page, query)
         .then(data => {
           const { hits, totalHits } = data.data;
           console.log(hits, totalHits);
@@ -66,7 +71,7 @@ export const App = () => {
           setshowButton(true);
 
           if (totalHits > 0) {
-            toast.success(`Hooray! We found ${totalHits} images.`);
+            // toast.success(`Hooray! We found ${totalHits} images.`);
             setshowButton(true);
           }
           if (totalHits > 0 && hits.length === totalHits) {
@@ -83,7 +88,7 @@ export const App = () => {
         .finally(() => {
           setIsLoading(false);
         });
-      console.log(items);
+      // console.log(items);
     }
   }, [page]);
 
@@ -93,7 +98,7 @@ export const App = () => {
 
   return (
     <AppWrapper>
-      <Searchbar page={page} onForm={onForm} />
+      <Searchbar page={page} onFormText={onFormText} onFormPage={onFormPage} />
       {isLoading && <Loader />}
       {items && <ImageGallery items={items} />}
       {showButton && (!items || items.length !== 0) && (
