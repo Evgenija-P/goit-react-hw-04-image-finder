@@ -14,19 +14,9 @@ import {
 export const Searchbar = ({ page, onFormText, onFormPage }) => {
   const [currentPage, setСurrentPage] = useState(1);
   const [text, setText] = useState('');
-  // const isFirsRender = useRef(true);
 
   useEffect(() => {
-    // if (isFirsRender.current) {
-    //   isFirsRender.current = false;
-    //   return;
-    // }
-
-    // if (currentPage === 0) {
-    //   return;
-    // }
-
-    if (currentPage !== 1 && currentPage < page) {
+    if (currentPage < page) {
       setСurrentPage(page);
     } else {
       onFormPage({ currentPage });
@@ -48,9 +38,11 @@ export const Searchbar = ({ page, onFormText, onFormPage }) => {
       return;
     }
 
-    setСurrentPage(currentPage + 1);
+    if (currentPage > 1) {
+      setСurrentPage(currentPage + 1);
+    }
 
-    onFormText({ text, currentPage });
+    onFormText({ text });
     console.log(text, currentPage);
   };
 

@@ -19,10 +19,10 @@ export const App = () => {
   const [showButton, setshowButton] = useState(false);
   const isFirsRender = useRef(true);
 
-  function onFormText({ text, currentPage }) {
+  function onFormText({ text }) {
     setQuery(text);
-    setPage(currentPage);
-    console.log(text, currentPage);
+    // setPage(currentPage);
+    console.log(text);
   }
 
   function onFormPage({ currentPage }) {
@@ -38,6 +38,10 @@ export const App = () => {
   useEffect(() => {
     if (isFirsRender.current) {
       isFirsRender.current = false;
+      return;
+    }
+
+    if (query === '') {
       return;
     }
 
