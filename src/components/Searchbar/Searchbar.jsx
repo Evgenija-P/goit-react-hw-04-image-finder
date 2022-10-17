@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
@@ -14,8 +14,13 @@ import {
 export const Searchbar = ({ page, onFormText, onFormPage }) => {
   const [currentPage, setСurrentPage] = useState(0);
   const [text, setText] = useState('');
+  const isFirsRender = useRef(true);
 
   useEffect(() => {
+    if (isFirsRender.current) {
+      isFirsRender.current = false;
+      return;
+    }
     if (page >= currentPage) {
       setСurrentPage(page);
     } else {
