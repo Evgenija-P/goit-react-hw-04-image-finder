@@ -9,7 +9,6 @@ import { AppWrapper } from './App.styled';
 import { Button } from 'components/Button';
 import { fetchImage } from '../api';
 import { Loader } from 'components/Loader';
-import { useRef } from 'react';
 
 export const App = () => {
   const [page, setPage] = useState(1);
@@ -17,17 +16,13 @@ export const App = () => {
   const [items, setiItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showButton, setshowButton] = useState(false);
-  const isFirsRender = useRef(true);
 
   function onFormText({ text }) {
     setQuery(text);
-    // setPage(currentPage);
-    console.log(text);
   }
 
   function onFormPage({ currentPage }) {
     setPage(currentPage);
-    console.log(currentPage);
   }
 
   useEffect(() => {
@@ -36,11 +31,6 @@ export const App = () => {
   }, [query]);
 
   useEffect(() => {
-    if (isFirsRender.current) {
-      isFirsRender.current = false;
-      return;
-    }
-
     if (query === '') {
       return;
     }
@@ -49,11 +39,8 @@ export const App = () => {
     fetchImage(page, query)
       .then(data => {
         const { hits, totalHits } = data.data;
-        console.log(hits, totalHits);
         setiItems(prevItems => [...prevItems, ...hits]);
-
         if (totalHits > 0) {
-          // toast.success(`Hooray! We found ${totalHits} images.`);
           setshowButton(true);
         }
         if (totalHits > 0 && hits.length === totalHits) {
@@ -78,7 +65,12 @@ export const App = () => {
 
   return (
     <AppWrapper>
-      <Searchbar page={page} onFormText={onFormText} onFormPage={onFormPage} />
+      <Searchbar
+        page={page}
+        onFormText={onFormText}
+        onFormPage={onFormPage}
+        query={query}
+      />
       {isLoading && <Loader />}
       {(!items || items.length !== 0) && <ImageGallery items={items} />}
       {showButton && (!items || items.length !== 0) && (

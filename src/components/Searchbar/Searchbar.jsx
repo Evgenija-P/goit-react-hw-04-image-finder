@@ -11,20 +11,24 @@ import {
   Input,
 } from './Searchbar.styled';
 
-export const Searchbar = ({ page, onFormText, onFormPage }) => {
+export const Searchbar = ({ query, page, onFormText, onFormPage }) => {
   const [currentPage, setСurrentPage] = useState(1);
   const [text, setText] = useState('');
 
   useEffect(() => {
-    if (currentPage < page) {
+    if (query !== text) {
+      setСurrentPage(1);
+      return;
+    }
+  }, [query, text]);
+
+  useEffect(() => {
+    if (query === text && currentPage < page) {
       setСurrentPage(page);
     } else {
       onFormPage({ currentPage });
     }
-  }, [currentPage, onFormPage, page]);
-
-  console.log('propPage', page);
-  console.log('currentPage', currentPage);
+  }, [currentPage, onFormPage, page, query, text]);
 
   const handleChange = e => {
     setText(e.target.value.toLowerCase());
@@ -43,7 +47,6 @@ export const Searchbar = ({ page, onFormText, onFormPage }) => {
     }
 
     onFormText({ text });
-    console.log(text, currentPage);
   };
 
   const id = nanoid(3);
@@ -71,7 +74,8 @@ export const Searchbar = ({ page, onFormText, onFormPage }) => {
 };
 
 Searchbar.propTypes = {
-  onSearch: PropTypes.func,
+  query: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
   onFormText: PropTypes.func.isRequired,
   onFormPage: PropTypes.func.isRequired,
 };
