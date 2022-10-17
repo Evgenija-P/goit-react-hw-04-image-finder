@@ -12,16 +12,21 @@ import {
 } from './Searchbar.styled';
 
 export const Searchbar = ({ page, onFormText, onFormPage }) => {
-  const [currentPage, setСurrentPage] = useState(0);
+  const [currentPage, setСurrentPage] = useState(1);
   const [text, setText] = useState('');
-  const isFirsRender = useRef(true);
+  // const isFirsRender = useRef(true);
 
   useEffect(() => {
-    if (isFirsRender.current) {
-      isFirsRender.current = false;
-      return;
-    }
-    if (page >= currentPage) {
+    // if (isFirsRender.current) {
+    //   isFirsRender.current = false;
+    //   return;
+    // }
+
+    // if (currentPage === 0) {
+    //   return;
+    // }
+
+    if (currentPage !== 1 && currentPage < page) {
       setСurrentPage(page);
     } else {
       onFormPage({ currentPage });

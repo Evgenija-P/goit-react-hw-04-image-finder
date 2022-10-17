@@ -40,6 +40,7 @@ export const App = () => {
       isFirsRender.current = false;
       return;
     }
+
     setIsLoading(true);
     fetchImage(page, query)
       .then(data => {
